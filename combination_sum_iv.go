@@ -4,6 +4,7 @@ import (
 	"fmt"
 )
 
+// Given an integer array with all positive numbers and no duplicates, find the number of possible combinations that add up to a positive integer target.
 func combinationSum4(nums []int, target int) int {
 	cnt := 0
 	for _, v := range nums {
@@ -12,10 +13,10 @@ func combinationSum4(nums []int, target int) int {
 			continue
 		}
 		if next == 0 {
-			return cnt + 1
+			cnt++
 		}
 		for _, tmp := range nums {
-			if tmp == next {
+			if tmp <= next {
 				cnt += combinationSum4(nums, next)
 				break
 			}
@@ -26,8 +27,8 @@ func combinationSum4(nums []int, target int) int {
 }
 
 func main() {
-	arr := []int{2, 1, 3}
-	target := 4
+	arr := []int{1, 2, 3}
+	target := 32
 	ret := combinationSum4(arr, target)
 	fmt.Println(ret)
 }
