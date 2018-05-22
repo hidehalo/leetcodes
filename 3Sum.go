@@ -23,15 +23,14 @@ func threeSum(nums []int) [][]int {
 			}
 			k = j + 1
 		}
-		fmt.Println("index:", hashSet[nums[i]], hashSet[nums[j]], hashSet[nums[k]])
+		fmt.Println("nums:", nums[i], nums[j], nums[k])
+		fmt.Println("hash set:", hashSet[nums[i]], hashSet[nums[j]], hashSet[nums[k]])
 		if hashSet[nums[i]] && hashSet[nums[j]] && hashSet[nums[k]] {
 			j++
 			k = j + 1
 			continue
 		}
-		fmt.Println("index:", i, j, k)
-
-		// fmt.Println("nums:", nums[i], nums[j], nums[k])
+		// fmt.Println("index:", i, j, k)
 		if nums[i]+nums[j]+nums[k] == 0 {
 			if !hashSet[nums[i]] || !hashSet[nums[j]] || !hashSet[nums[k]] {
 				ret = append(ret, []int{nums[i], nums[j], nums[k]})
