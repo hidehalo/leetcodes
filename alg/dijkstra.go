@@ -94,7 +94,18 @@ func Constructor(v []vertexID, w map[vertexID]map[vertexID]weight) *Graph {
 // 	}
 // }
 
-func Dijkstra(g *Graph) uint {
+func Dijkstra(g *Graph, w [][]weight, s *vertex) uint {
+	// init(g, s)
+	// S := make([]weight, 0, len(g.v))
+	// Q := g.v
+	// for len(Q) > 0 {
+	// u := extractMin(Q)
+	// S = append(S, u)
+	// for _, v := range g.e[u] {
+	// relax(u, v, w)
+	// }
+	// }
+
 	return 0
 }
 
