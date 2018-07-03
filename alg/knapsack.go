@@ -33,9 +33,9 @@ func knapsackDP(W int, w []int, v []int, n int) int {
 	for i := 1; i <= n; i++ {
 		for wi := 0; wi <= W; wi++ {
 			cntDP++
-			if w[i-1] <= W {
-				if v[i-1]+B[i-1][W-w[i-1]] > B[i-1][wi] {
-					B[i][wi] = v[i-1] + B[i-1][W-w[i-1]]
+			if w[i-1] <= wi {
+				if v[i-1]+B[i-1][wi-w[i-1]] > B[i-1][wi] {
+					B[i][wi] = v[i-1] + B[i-1][wi-w[i-1]]
 				} else {
 					B[i][wi] = B[i-1][wi]
 				}
@@ -49,8 +49,8 @@ func knapsackDP(W int, w []int, v []int, n int) int {
 }
 
 func main() {
-	w := []int{10, 20, 30}
-	b := []int{60, 100, 120}
+	w := []int{10, 20, 30, 10, 20, 30, 10, 20, 30, 10, 20, 30, 10, 20, 30, 10, 20, 30, 10, 20, 30}
+	b := []int{60, 100, 120, 60, 100, 120, 60, 100, 120, 60, 100, 120, 60, 100, 120, 60, 100, 120, 60, 100, 120}
 	n := len(w)
 	fmt.Println("non-dp Result:", knapsack(50, w, b, n))
 	fmt.Println("non-dp T(n):", cnt)

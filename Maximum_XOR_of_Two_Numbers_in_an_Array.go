@@ -6,18 +6,18 @@ import (
 
 func findMaximumXOR(nums []int) int {
 	size := len(nums)
-	var flag, max, xorMax int
+	var max, xorMax int
 	max = nums[0]
-	flag = 0
 	xorMax = 0
 	for i := 1; i < size; i++ {
 		if nums[i] > max {
 			max = nums[i]
 			continue
 		}
-		if nums[i]&max < flag {
-			flag = nums[i] & max
-			xorMax = max ^ flag
+	}
+	for i := 0; i < size; i++ {
+		if nums[i]^max > xorMax {
+			xorMax = nums[i] ^ max
 		}
 	}
 
