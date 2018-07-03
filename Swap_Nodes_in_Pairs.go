@@ -37,37 +37,32 @@ func (head *ListNode) String() string {
 func swapPairs(head *ListNode) *ListNode {
 	t := &ListNode{}
 	t.Next = head
+	if head == nil || head.Next == nil {
+		return head
+	}
 	p0 := t.Next
 	p1 := p0.Next
+	ret := p1
 	for p0 != nil && p1 != nil {
-		//swap nodes
-		// fmt.Println(p0.Val, p1.Val)
-		p1, p0 = p0, p1
-		// fmt.Println(p0.Val, p1.Val)
-		//set new link from old tail node to new first node
-		t.Next = p1
-		//set new link from new tail node to next node
+		// swap nodes links
 		p0.Next = p1.Next
-		//set new link between nodes
 		p1.Next = p0
-		//set new tail node
+		t.Next = p1
+		// move tail pointer
 		t = p0
-		// next pair
-		p0, p1 = t.Next, t.Next.Next
-		// fmt.Println(t.Val, p0.Val, p1.Val)
-		// break
+		// move p0,p1 to next pair
+		if t.Next != nil && t.Next.Next != nil {
+			p0, p1 = t.Next, t.Next.Next
+		} else {
+			break
+		}
 	}
-	//fix up for odd list
-	// if p0 != nil && p1 == nil {
-	// 	t.Next = p0
-	// }
 
-	return head
+	return ret
 }
 
 func main() {
-	head := Constructor([]int{1, 2, 3, 4})
+	head := Constructor([]int{1, 2, 3, 4, 5})
 	fmt.Println(head)
-	swapPairs(head)
-	// fmt.Println(swapPairs(head))
+	fmt.Println(swapPairs(head))
 }
