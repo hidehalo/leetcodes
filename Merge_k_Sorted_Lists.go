@@ -40,6 +40,9 @@ func (root *ListNode) String() string {
 }
 
 func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
+	if l1 == l2 {
+		return l1
+	}
 	head := &ListNode{
 		Val:  -1,
 		Next: nil,
@@ -67,14 +70,28 @@ func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
 
 func mergeKLists(lists []*ListNode) *ListNode {
 	k := len(lists)
-	var l1, l2 *ListNode
-	for i := 0; i < k; i++ {
-		l1 = lists[i]
-		l2 = mergeTwoLists(l1, l2)
+	if k < 1 {
+		return nil
+	}
+	newLists := make([]*ListNode, 0, k)
+	l, r := 0, k-1
+	for l <= r {
+		newLists = append(newLists, mergeTwoLists(lists[l], lists[r]))
+		l++
+		r--
+	}
+	if len(newLists) > 1 {
+		return mergeKLists(newLists)
 	}
 
-	return l2
+	return newLists[0]
+	// var l1, l2 *ListNode
+	// for i := 0; i < k; i++ {
+	// 	l1 = lists[i]
+	// 	l2 = mergeTwoLists(l1, l2)
+	// }
 
+	// return l2
 }
 
 func main() {
