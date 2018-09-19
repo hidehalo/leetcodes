@@ -5,28 +5,41 @@ import (
 	"math"
 )
 
-func solveSudoku(board [][]byte) bool {
+func solveSudoku(board [][]byte) {
 	h := len(board)
 	if h <= 0 {
 		return
 	}
-	filled := 0
-	for i := 0; i < h; i++ {
-		for j := 0; j < h; j++ {
-			if board[i][j] == '.' {
-				for k := 1; k < h; k++ {
-					board[i][j] = byte(k + '0')
-					if valid(board, i, j) {
-						break
-					} else {
-						board[i][j] = '.'
-					}
+
+	solve(board, 0, 0)
+}
+
+func solve(board [][]byte, x int, y int) bool {
+	h := len(board)
+	if h <= 0 {
+		return false
+	}
+	if x >= h || y >= h {
+		return false
+	}
+	if board[x][y] == '.' {
+		for k := 1; k < h; k++ {
+			board[x][y] = byte(k + '0')
+			if valid(board, x, y) {
+				if solve(board, x+1, y) == true &&
+					solve(board, x, y+1) == true {
+					break
 				}
 			} else {
-				filled++
+				board[x][y] = '.'
 			}
 		}
+	} else {
+		solve(board, x+1, y)
+		solve(board, x, y+1)
 	}
+
+	return true
 }
 
 func valid(board [][]byte, x int, y int) bool {
