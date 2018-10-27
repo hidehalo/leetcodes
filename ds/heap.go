@@ -16,26 +16,22 @@ const (
 	Priority_LO pri = 2
 )
 
-type IHeap interface {
+type IPriority interface {
 	Compare(a val, b val) pri
-	Top() val
-	Insert(v val)
-	ExtractTop()
-	String()
 }
 
 type Heap struct {
-	IHeap
-	size  uint
-	store []val
+	priority IPriority
+	size     uint
+	store    []val
 }
 
 type MinHeap struct {
-	Heap
+	IPriority
 }
 
 type MaxHeap struct {
-	Heap
+	IPriority
 }
 
 func (h *Heap) Top() val {
@@ -46,8 +42,7 @@ func (h *Heap) Insert(v val) {
 	h.store = append(h.store, v)
 	h.size++
 	i := key(h.size - 1)
-	fmt.Println(*h)
-	isHi := h.Compare(h.store[h.parent(i)], h.store[i]) == Priority_HI
+	isHi := h.priority.Compare(h.store[h.parent(i)], h.store[i]) == Priority_HI
 	for i > 0 && !isHi {
 		h.swap(h.parent(i), i)
 		i = h.parent(i)
@@ -71,10 +66,10 @@ func (h *Heap) heapify(hi key) {
 	l := h.left(hi)
 	r := h.right(hi)
 	_hi := hi
-	if h.Compare(h.store[hi], h.store[l]) == Priority_LO {
+	if h.priority.Compare(h.store[hi], h.store[l]) == Priority_LO {
 		_hi = l
 	}
-	if h.Compare(h.store[hi], h.store[r]) == Priority_LO {
+	if h.priority.Compare(h.store[hi], h.store[r]) == Priority_LO {
 		_hi = r
 	}
 	if _hi != hi {
@@ -118,29 +113,12 @@ func (h *Heap) initHeap(vals *[]val) {
 	}
 }
 
-func NewHeap(vals []val) Heap {
-	h := Heap{
-		size:  0,
-		store: make([]val, 0, 1000),
+func NewHeap(vals []val, priority IPriority) *Heap {
+	h := &Heap{
+		priority: priority,
+		size:     0,
+		store:    make([]val, 0, 1000),
 	}
-
-	return h
-}
-
-func NewMinHeap(vals []val) *MinHeap {
-	h := &MinHeap{
-		Heap: NewHeap(vals),
-	}
-	h.initHeap(&vals)
-
-	return h
-}
-
-func NewMaxHeap(vals []val) *MaxHeap {
-	h := &MaxHeap{
-		Heap: NewHeap(vals),
-	}
-	h.initHeap(&vals)
 
 	return h
 }
@@ -163,8 +141,8 @@ func (h *MaxHeap) Compare(a val, b val) pri {
 
 func main() {
 	vals := []val{1, 2, 3, 4, 5}
-	maxHeap := NewMaxHeap(vals)
-	minHeap := NewMinHeap(vals)
+	maxHeap := NewHeap(vals, new(MaxHeap))
+	minHeap := NewHeap(vals, new(MinHeap))
 	fmt.Println(maxHeap)
 	fmt.Println(minHeap)
 }
