@@ -42,7 +42,7 @@ func (h *Heap) Insert(v val) {
 	h.store = append(h.store, v)
 	h.size++
 	i := key(h.size - 1)
-	isHi := h.priority.Compare(h.store[h.parent(i)], h.store[i]) == Priority_HI
+	isHi := h.priority.Compare(h.store[h.parent(i)], h.store[i]) != Priority_LO
 	for i > 0 && !isHi {
 		h.swap(h.parent(i), i)
 		i = h.parent(i)
@@ -79,11 +79,16 @@ func (h *Heap) heapify(hi key) {
 }
 
 func (h *Heap) parent(i key) key {
-	return (i - 1) << 1
+	p := (i - 1) >> 1
+	if p >= 0 {
+		return p
+	}
+
+	return 0
 }
 
 func (h *Heap) left(i key) key {
-	return i>>1 + 1
+	return i<<1 + 1
 }
 
 func (h *Heap) right(i key) key {
@@ -119,6 +124,9 @@ func NewHeap(vals []val, priority IPriority) *Heap {
 		size:     0,
 		store:    make([]val, 0, 1000),
 	}
+	for _, v := range vals {
+		h.Insert(v)
+	}
 
 	return h
 }
@@ -126,6 +134,8 @@ func NewHeap(vals []val, priority IPriority) *Heap {
 func (h *MinHeap) Compare(a val, b val) pri {
 	if a < b {
 		return Priority_HI
+	} else if a == b {
+		return Priority_EQ
 	}
 
 	return Priority_LO
@@ -134,6 +144,8 @@ func (h *MinHeap) Compare(a val, b val) pri {
 func (h *MaxHeap) Compare(a val, b val) pri {
 	if a > b {
 		return Priority_HI
+	} else if a == b {
+		return Priority_EQ
 	}
 
 	return Priority_LO
