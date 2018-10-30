@@ -39,6 +39,7 @@ func fourSum(nums []int, target int) [][]int {
 				for start < end-1 && nums[end] == nums[end-1] {
 					end--
 				}
+				// FIXME: result would be duplicated when t equals zero
 				for _, pair := range p {
 					fmt.Println(start, end, pair)
 					if pair[0] == start || pair[1] == start || pair[0] == end || pair[1] == end {
