@@ -16,7 +16,16 @@ func fourSum(nums []int, target int) [][]int {
 	dp := make(map[int][][2]int)
 	for i := 0; i < size; i++ {
 		for j := i + 1; j < size; j++ {
-			dp[nums[i]+nums[j]] = append(dp[nums[i]+nums[j]], [2]int{i, j})
+			checked := true
+			for _, pair := range dp[nums[i]+nums[j]] {
+				if pair[0] == i || pair[1] == i || pair[0] == j || pair[1] == j {
+					checked = false
+					break
+				}
+			}
+			if checked {
+				dp[nums[i]+nums[j]] = append(dp[nums[i]+nums[j]], [2]int{i, j})
+			}
 		}
 	}
 	for t, p := range dp {
