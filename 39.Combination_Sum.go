@@ -67,6 +67,9 @@ func combinationSum(candidates []int, target int) [][]int {
 	return ret
 }
 
+// DP vision: cache 1..target sum combination,
+// pick a value, return dp[target-picked],
+// but it needs to calc all combination once, so is it meaningful?
 func recur(candidates *[]int, target int, level int, stack *Stack, ret *[][]int) {
 	if target < 0 {
 		return
