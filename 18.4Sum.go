@@ -12,7 +12,6 @@ func fourSum(nums []int, target int) [][]int {
 		return ret
 	}
 	sort.Ints(nums)
-	fmt.Println(nums)
 	dp := make(map[int][][2]int)
 	for i := 0; i < size; i++ {
 		for j := i + 1; j < size; j++ {
@@ -28,34 +27,54 @@ func fourSum(nums []int, target int) [][]int {
 			}
 		}
 	}
+	dup := make(map[int]bool)
 	for t, p := range dp {
-		start := 0
-		end := size - 1
-		for start < end-1 {
-			if target-t == nums[start]+nums[end] {
-				for start < end-1 && nums[start] == nums[start+1] {
-					start++
-				}
-				for start < end-1 && nums[end] == nums[end-1] {
-					end--
-				}
-				// FIXME: result would be duplicated when t equals zero
-				for _, pair := range p {
-					fmt.Println(start, end, pair)
-					if pair[0] == start || pair[1] == start || pair[0] == end || pair[1] == end {
-						continue
-					}
-					ret = append(ret, []int{nums[pair[0]], nums[pair[1]], nums[start], nums[end]})
+		// NOTE: result would be duplicated when t equals target and equals zero
+		if target == 2*t {
+			for i, pair := range p {
+				for j := i + 1; j < len(p); j++ {
+					ret = append(ret, []int{nums[p[j][0]], nums[p[j][1]], nums[pair[0]], nums[pair[1]]})
 				}
 			}
-			start++
-			end--
+		} else {
+			if v, ok := dup[t]; ok == true && v == true {
+				continue
+			}
+			if pairsMirror, ok := dp[target-t]; ok == true && pairsMirror != nil {
+				fmt.Println(t)
+				for _, pair := range p {
+					for _, mirror := range pairsMirror {
+						ret = append(ret, []int{nums[mirror[0]], nums[mirror[1]], nums[pair[0]], nums[pair[1]]})
+					}
+				}
+				dup[target-t] = true
+			}
 		}
+		// start := 0
+		// end := size - 1
+		// for start < end-1 {
+		// 	if target-t == nums[start]+nums[end] {
+		// 		for start < end-1 && nums[start] == nums[start+1] {
+		// 			start++
+		// 		}
+		// 		for start < end-1 && nums[end] == nums[end-1] {
+		// 			end--
+		// 		}
+		// 		for _, pair := range p {
+		// 			if pair[0] == start || pair[1] == start || pair[0] == end || pair[1] == end {
+		// 				continue
+		// 			}
+		// 			ret = append(ret, []int{nums[pair[0]], nums[pair[1]], nums[start], nums[end]})
+		// 		}
+		// 	}
+		// 	start++
+		// 	end--
+		// }
 	}
 
 	return ret
 }
 
 func main() {
-	fmt.Println(fourSum([]int{1, 0, -1, 0, -2, 2}, 1))
+	fmt.Println(fourSum([]int{-3, -2, -1, 0, 0, 1, 2, 3}, 0))
 }
