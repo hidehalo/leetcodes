@@ -31,17 +31,22 @@ func fourSum(nums []int, target int) [][]int {
 	for t, p := range dp {
 		// NOTE: result would be duplicated when t equals target and equals zero
 		if target == 2*t {
+			if v, ok := dup[t]; ok == true && v == true {
+				continue
+			}
 			for i, pair := range p {
 				for j := i + 1; j < len(p); j++ {
 					ret = append(ret, []int{nums[p[j][0]], nums[p[j][1]], nums[pair[0]], nums[pair[1]]})
 				}
 			}
+			dup[t] = true
 		} else {
+			// FIXEME: a+b=c; a+c=d; (b+d) and (c+d) not in [a b c d];
+			// abcd will generate duplicated results (eg:[a c b d] [a b c d])
 			if v, ok := dup[t]; ok == true && v == true {
 				continue
 			}
 			if pairsMirror, ok := dp[target-t]; ok == true && pairsMirror != nil {
-				fmt.Println(t)
 				for _, pair := range p {
 					for _, mirror := range pairsMirror {
 						ret = append(ret, []int{nums[mirror[0]], nums[mirror[1]], nums[pair[0]], nums[pair[1]]})
