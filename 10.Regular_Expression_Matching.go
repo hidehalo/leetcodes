@@ -40,6 +40,9 @@ func isMatch(s string, p string) bool {
 			// 		j++
 			// 	}
 			// }
+			for i < sizeS && s[i] == cache {
+				i++
+			}
 			cache = p[j]
 			if s[i] == p[j] {
 				i++
