@@ -16,12 +16,8 @@ func isMatch(s string, p string) bool {
 	if sizeP <= 0 {
 		return false
 	}
-	if sizeP == sizeS+1 &&
-		p[sizeP-1] != '*' {
-		return false
-
-	}
 	i, j := 0, 0
+	var cache byte
 	for i < sizeS && j < sizeP {
 		if p[j] == '.' {
 			if j < sizeP-1 && p[j+1] == '*' {
@@ -31,22 +27,41 @@ func isMatch(s string, p string) bool {
 			i++
 			continue
 		} else if j < sizeP-1 && p[j+1] == '*' {
-			for i < sizeS && s[i] == p[j] {
+			// for i < sizeS && s[i] == p[j] {
+			// 	i++
+			// }
+			// j += 2
+			// if i >= sizeS && j < sizeP {
+			// 	fmt.Println(sizeP-j, i)
+			// 	if sizeP-j > i {
+			// 		return false
+			// 	}
+			// 	for j < sizeP && s[sizeS-1] == p[j] {
+			// 		j++
+			// 	}
+			// }
+			cache = p[j]
+			if s[i] == p[j] {
 				i++
 			}
 			j += 2
 			continue
 		}
-		i++
-		j++
+		if s[i] != p[j] {
+			if s[i] == cache {
+				i++
+			} else {
+				return false
+			}
+		} else {
+			i++
+			j++
+		}
 	}
-	fmt.Println(i, j)
-	if i < sizeS || j < sizeP {
-		return false
-	}
+
 	return true
 }
 
 func main() {
-	fmt.Println(isMatch("aaa", "a*aa"))
+	fmt.Println(isMatch("aaa", "a*aaaaaaa"))
 }
