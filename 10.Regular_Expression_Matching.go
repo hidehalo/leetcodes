@@ -51,6 +51,7 @@ func NewStack() *Stack {
 }
 
 func isMatch(s string, p string) bool {
+	// base validations
 	if p == ".*" {
 		return true
 	}
@@ -64,16 +65,26 @@ func isMatch(s string, p string) bool {
 	if sizeP <= 0 {
 		return false
 	}
+	// matching algorithm
 	i, j := 0, 0
 	stack := NewStack()
 	for i < sizeS && j < sizeP {
 		if p[j] == '.' {
 			// pattern "."
-			if j < sizeP-1 && p[j+1] == '*' {
+			if j == sizeP-2 && p[j+1] == '*' {
 				return true
+			} else if p[j+1] == '*' {
+				stack.Push('.')
 			}
-			j++
-			i++
+			if stack.Len() > 0 {
+				node := stack.Pop()
+				for i < sizeS && (s[i] == node.Val() || node.Val() == '.') {
+					i++
+				}
+			} else {
+				j++
+				i++
+			}
 			continue
 		} else if j < sizeP-1 && p[j+1] == '*' {
 			// pattern "char*"
@@ -89,9 +100,8 @@ func isMatch(s string, p string) bool {
 			} else if p[j] != s[i] && stack.Len() > 0 {
 				for stack.Len() > 0 {
 					node := stack.Pop()
-					if node.Val() == s[i] {
+					for i < sizeS && (s[i] == node.Val() || node.Val() == '.') {
 						i++
-						break
 					}
 				}
 			} else {
@@ -100,30 +110,46 @@ func isMatch(s string, p string) bool {
 		}
 	}
 	fmt.Println(stack.Len(), i, j)
-	// FIXME: it can not do backtracing match when alphabet pattern is longer
+	// check tail chars
+	if i == sizeS && j != sizeP {
+		switch sizeP - j {
+		case 1:
+			if p[j] != '*' {
+				return false
+			} else {
+				return true
+			}
+		case 2:
+			if !(p[j] != '*' && p[j+1] == '*') {
+				return false
+			} else {
+				return true
+			}
+		default:
+			return false
+		}
+	}
+	// fix up pointer j
+	if i < sizeS && j == sizeP {
+		for i < sizeS && stack.Len() > 0 {
+			node := stack.Pop()
+			for i < sizeS && (s[i] == node.Val() || node.Val() == '.') {
+				i++
+			}
+		}
+	}
+	fmt.Println(stack.Len(), i, j)
+	// final validations
 	if i < sizeS {
 		return false
 	}
-	switch sizeP - j {
-	case 0:
+	if sizeP-j == 0 {
 		return true
-	case 1:
-		if p[j] != '*' {
-			return false
-		}
-		break
-	case 2:
-		if !(p[j] == '.' && p[j+1] == '*') {
-			return false
-		}
-		break
-	default:
-		return false
 	}
 
 	return false
 }
 
 func main() {
-	fmt.Println(isMatch("aaa", "a*aa.*"))
+	fmt.Println(isMatch("bbbba", ".*a*a"))
 }
