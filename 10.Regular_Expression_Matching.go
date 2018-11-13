@@ -73,12 +73,19 @@ func isMatch(s string, p string) bool {
 			// pattern "."
 			if j == sizeP-2 && p[j+1] == '*' {
 				return true
-			} else if p[j+1] == '*' {
+			} else if j < sizeP-1 && p[j+1] == '*' {
+				// .*xxxxx
+				// xxxx.*xxxxx
 				stack.Push('.')
+				j += 2
 			}
 			if stack.Len() > 0 {
 				node := stack.Pop()
 				for i < sizeS && (s[i] == node.Val() || node.Val() == '.') {
+					if i < sizeS-1 && node.Val() == '.' && s[i] != s[i+1] {
+						i++
+						break
+					}
 					i++
 				}
 			} else {
@@ -101,6 +108,10 @@ func isMatch(s string, p string) bool {
 				for stack.Len() > 0 {
 					node := stack.Pop()
 					for i < sizeS && (s[i] == node.Val() || node.Val() == '.') {
+						if i < sizeS-1 && node.Val() == '.' && s[i] != s[i+1] {
+							i++
+							break
+						}
 						i++
 					}
 				}
@@ -109,7 +120,7 @@ func isMatch(s string, p string) bool {
 			}
 		}
 	}
-	fmt.Println(stack.Len(), i, j)
+	// fmt.Println(stack.Len(), i, j)
 	// check tail chars
 	if i == sizeS && j != sizeP {
 		switch sizeP - j {
@@ -138,7 +149,7 @@ func isMatch(s string, p string) bool {
 			}
 		}
 	}
-	fmt.Println(stack.Len(), i, j)
+	// fmt.Println(stack.Len(), i, j)
 	// final validations
 	if i < sizeS {
 		return false
@@ -151,5 +162,5 @@ func isMatch(s string, p string) bool {
 }
 
 func main() {
-	fmt.Println(isMatch("bbbba", ".*a*a"))
+	fmt.Println(isMatch("mississippi", "mis*is*p*."))
 }
