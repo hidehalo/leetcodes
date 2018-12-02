@@ -7,18 +7,20 @@ import (
 func combinationSum2(candidates []int, target int) [][]int {
 	size := len(candidates)
 	ret := make([][]int, 0, size)
-	recur(&candidates, 0, target)
+	for i := 0; i < size-1; i++ {
+		recur(candidates[i:], 0, target)
+	}
 
 	return ret
 }
 
-func recur(candidates *[]int, offset int, target int) {
-	size := len((*candidates))
-	if size <= 0 {
+func recur(candidates []int, offset int, target int) {
+	size := len(candidates)
+	if offset >= size {
 		return
 	}
 	if target == 0 {
-		fmt.Println((*candidates)[0], "fi")
+		fmt.Println("fi")
 		return
 	}
 	if target < 0 {
@@ -26,13 +28,14 @@ func recur(candidates *[]int, offset int, target int) {
 	}
 	i := offset
 	for ; i < size-1; i++ {
-		if target < (*candidates)[i] {
+		if target < candidates[i] {
 			continue
 		} else {
 			break
 		}
 	}
-	recur(candidates, i+1, target-(*candidates)[i])
+	fmt.Println(candidates[i])
+	recur(candidates, i+1, target-candidates[i])
 }
 
 func main() {
