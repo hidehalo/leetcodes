@@ -26,18 +26,18 @@ func combine(l []int, r []int) []int {
 	return a
 }
 
-func merge_sort(a []int, l int, r int) []int {
+func mergeSort(a []int, l int, r int) []int {
 	if l == r {
-		return a
+		return a[l : r+1]
 	}
 	mid := (l + r) / 2
-	fmt.Println(l, mid, r)
-	la := merge_sort(a, l, mid)
-	ra := merge_sort(a, mid+1, r)
-	return combine(la, ra)
+	leftArr := mergeSort(a, l, mid)
+	rightArr := mergeSort(a, mid+1, r)
+
+	return combine(leftArr, rightArr)
 }
 
 func main() {
-	nums := []int{9, 8, 7, 6, 5, 4, 3, 2, 1, 0}
-	fmt.Println(merge_sort(nums, 0, len(nums)-1))
+	nums := []int{9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4}
+	fmt.Println(mergeSort(nums, 0, len(nums)-1))
 }
