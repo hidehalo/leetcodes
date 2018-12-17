@@ -56,7 +56,30 @@ func findMaxCrossingSubArray(arr []int, low, mid, high int) (int, int, int) {
 	return maxLeft, maxRight, sum
 }
 
+func bruteForceFindMaximumSubArray(arr []int, low, high int) (int, int, int) {
+	var maxStart, maxEnd, maxSum, sum int
+	for i := low; i <= high; i++ {
+		sum = 0
+		for j := 0; j <= high-i; j++ {
+			if i == low && j == 0 {
+				maxStart, maxEnd = i, i+j
+				maxSum = arr[i]
+				sum = arr[i]
+				continue
+			}
+			sum += arr[i+j]
+			if sum > maxSum {
+				maxSum = sum
+				maxStart, maxEnd = i, i+j
+			}
+		}
+	}
+
+	return maxStart, maxEnd, maxSum
+}
+
 func main() {
 	arr := []int{-1, -2, -3, 4, 5, 1, 2, 3, -1, -3, -1, -6, 7, 8, 9, 10, 12, -10, -1, 9}
 	fmt.Println(findMaximumSubArray(arr, 0, len(arr)-1))
+	fmt.Println(bruteForceFindMaximumSubArray(arr, 0, len(arr)-1))
 }
