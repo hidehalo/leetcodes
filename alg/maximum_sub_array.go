@@ -6,7 +6,7 @@ func findMaximumSubArray(arr []int, low, high int) (int, int, int) {
 	if low == high {
 		return low, high, arr[low]
 	}
-	mid = (low + high) / 2
+	mid := (low + high) / 2
 	leftMaxStart, leftMaxEnd, leftMaxSum := findMaximumSubArray(arr, low, mid)
 	rightMaxStart, rightMaxEnd, rightMaxSum := findMaximumSubArray(arr, mid+1, high)
 	crossMaxStart, crossMaxEnd, crossMaxSum := findMaxCrossingSubArray(arr, low, mid, high)
@@ -57,6 +57,6 @@ func findMaxCrossingSubArray(arr []int, low, mid, high int) (int, int, int) {
 }
 
 func main() {
-	arr := []int{-1, -2, -3, -1, -2, -1, -3, -1, -1, -3, -4, -1, -6, -12}
-	fmt.Println(findMaxCrossingSubArray(arr, 0, len(arr)/2, len(arr)-1))
+	arr := []int{-1, -2, -3, 4, 5, 1, 2, 3, -1, -3, -1, -6, 7, 8, 9, 10, 12, -10, -1, 9}
+	fmt.Println(findMaximumSubArray(arr, 0, len(arr)-1))
 }
