@@ -78,8 +78,36 @@ func bruteForceFindMaximumSubArray(arr []int, low, high int) (int, int, int) {
 	return maxStart, maxEnd, maxSum
 }
 
+func optimalFindMaximumSubArray(arr []int, low, high int) (int, int, int) {
+	max := 0
+	for k := low; k <= high; k++ {
+		max += arr[k]
+	}
+	i, j := low, high
+	leftSum, rightSum := max, max
+	for i <= j {
+		leftSum -= arr[i]
+		rightSum -= arr[j]
+		if max > leftSum && max > rightSum {
+			break
+		}
+		// FIXIME: figure out how to find new max value
+		if leftSum > max && leftSum > rightSum {
+			max -= arr[i]
+			i++
+		}
+		if rightSum > max && rightSum > leftSum {
+			max -= arr[j]
+			j--
+		}
+	}
+
+	return i, j, max
+}
+
 func main() {
 	arr := []int{-1, -2, -3, 4, 5, 1, 2, 3, -1, -3, -1, -6, 7, 8, 9, 10, 12, -10, -1, 9}
 	fmt.Println(findMaximumSubArray(arr, 0, len(arr)-1))
 	fmt.Println(bruteForceFindMaximumSubArray(arr, 0, len(arr)-1))
+	fmt.Println(optimalFindMaximumSubArray(arr, 0, len(arr)-1))
 }
