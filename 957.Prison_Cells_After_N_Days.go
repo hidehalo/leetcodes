@@ -28,41 +28,64 @@ func bitmapToDecimal(bitmap []int) int {
 }
 
 func decimalToBitmap(dec int) []int {
-	ret := make([]int, 0, 1000)
+	ret := make([]int, 8)
 	binStr := strconv.FormatInt(int64(dec), 2)
-	for i := 0; i < len(binStr); i++ {
-		ret = append(ret, int(binStr[i]-'0'))
+	for i := 8 - len(binStr); i < 8; i++ {
+		ret[i] = int(binStr[i-8+len(binStr)] - '0')
 	}
 
 	return ret
 }
 
-func helper(cells []int, dp map[int]int) []int {
+func procedure(cells []int, buffer []int, dp map[int]int) {
 	if ret, ok := dp[bitmapToDecimal(cells)]; ok == true {
-		return decimalToBitmap(ret)
+		buffer = decimalToBitmap(ret)
+	} else {
+		for pivot := 1; pivot <= 6; pivot++ {
+			if cells[pivot-1] == cells[pivot+1] {
+				buffer[pivot] = 1
+			} else {
+				buffer[pivot] = 0
+			}
+		}
 	}
 	key := bitmapToDecimal(cells)
-	// FIXME: wrong algo
-	for pivot := 1; pivot <= 6; pivot++ {
-		if cells[pivot-1] == cells[pivot+1] {
-			cells[pivot] = 1
-		} else {
-			cells[pivot] = 0
-		}
-		if pivot == 1 {
-			cells[0], cells[7] = 0, 0
-		}
+	dp[key] = bitmapToDecimal(buffer)
+	for i, v := range buffer {
+		cells[i] = v
 	}
-	dp[key] = bitmapToDecimal(cells)
-
-	return cells
 }
 
 func prisonAfterNDays(cells []int, N int) []int {
 	dp := make(map[int]int)
-	for N > 0 {
-		cells = helper(cells, dp)
-		N--
+	buffer := make([]int, 8)
+	var first, current int
+	tmp := N
+	circleRound := 0
+	for tmp > 0 {
+		procedure(cells, buffer, dp)
+		if tmp == N {
+			first = bitmapToDecimal(cells)
+		} else {
+			current = bitmapToDecimal(cells)
+		}
+		// check circle round
+		if first == current {
+			// remove N=0 condition from dp
+			circleRound = len(dp) - 1
+			break
+		}
+		tmp--
+	}
+	if circleRound > 0 {
+		remain := N % circleRound
+		key := first
+		for i := 1; i < remain; i++ {
+			next := dp[key]
+			key = next
+		}
+
+		return decimalToBitmap(key)
 	}
 
 	return cells
@@ -70,7 +93,11 @@ func prisonAfterNDays(cells []int, N int) []int {
 
 func main() {
 	cells := []int{1, 0, 0, 1, 0, 0, 1, 0}
-	N := 1
+	N := 1000000000
 	fmt.Println(prisonAfterNDays(cells, N))
-	// excepted [0,1,1,1,1,0,0,0]
+	//e : 0,0,1,1,1,1,1,0
+	cells = []int{0, 0, 1, 1, 1, 1, 0, 0}
+	N = 8
+	fmt.Println(prisonAfterNDays(cells, N))
+	//e : [0,0,0,1,1,0,0,0]
 }
