@@ -37,6 +37,20 @@ func decimalToBitmap(dec int) []int {
 	return ret
 }
 
+func getCircleRound(dp map[int]int, start int) int {
+	ret := 0
+	next := start
+	for {
+		next = dp[next]
+		ret++
+		if next == start {
+			break
+		}
+	}
+
+	return ret
+}
+
 func procedure(cells []int, buffer []int, dp map[int]int) {
 	if ret, ok := dp[bitmapToDecimal(cells)]; ok == true {
 		buffer = decimalToBitmap(ret)
@@ -59,30 +73,25 @@ func procedure(cells []int, buffer []int, dp map[int]int) {
 func prisonAfterNDays(cells []int, N int) []int {
 	dp := make(map[int]int)
 	buffer := make([]int, 8)
-	var first, current int
+	var start, current int
 	tmp := N
 	circleRound := 0
 	for tmp > 0 {
-		procedure(cells, buffer, dp)
-		if tmp == N {
-			first = bitmapToDecimal(cells)
-		} else {
-			current = bitmapToDecimal(cells)
-		}
-		// check circle round
-		if first == current {
-			// remove N=0 condition from dp
-			circleRound = len(dp) - 1
+		current = bitmapToDecimal(cells)
+		if _, exsit := dp[current]; exsit == true {
+			start = current
+			circleRound = getCircleRound(dp, start)
 			break
 		}
+		procedure(cells, buffer, dp)
 		tmp--
 	}
 	if circleRound > 0 {
-		remain := N % circleRound
-		key := first
-		for i := 1; i < remain; i++ {
-			next := dp[key]
-			key = next
+		offset := len(dp) - circleRound
+		remain := (N - offset) % circleRound
+		key := start
+		for i := 0; i < remain; i++ {
+			key = dp[key]
 		}
 
 		return decimalToBitmap(key)
@@ -100,4 +109,8 @@ func main() {
 	N = 8
 	fmt.Println(prisonAfterNDays(cells, N))
 	//e : [0,0,0,1,1,0,0,0]
+	cells = []int{0, 1, 0, 1, 1, 0, 0, 1}
+	N = 7
+	fmt.Println(prisonAfterNDays(cells, N))
+	//e : [0,0,1,1,0,0,0,0]
 }
