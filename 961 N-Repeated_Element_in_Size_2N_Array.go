@@ -3,20 +3,19 @@ package main
 import "fmt"
 
 func repeatedNTimes(A []int) int {
-	var a, b int
-	for _, num := range A {
-		b = num
-		fmt.Println(a, b)
-		if a|b-a^b == b {
-			return b
+	check := make(map[int]int)
+	for _, a := range A {
+		if c, _ := check[a]; true {
+			if c >= 1 {
+				return a
+			}
+			check[a]++
 		}
-		a = a | b
 	}
-
 	return -1
 }
 
 func main() {
-	num := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1}
+	num := []int{1, 2, 3, 2, 5, 2}
 	fmt.Println(repeatedNTimes(num))
 }
