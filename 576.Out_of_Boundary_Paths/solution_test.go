@@ -16,6 +16,11 @@ func Test_findPaths(t *testing.T) {
 		want int
 	}{
 		// TODO: Add test cases.
+		{
+			"case1",
+			args{1, 4, 2, 0, 1},
+			12,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
