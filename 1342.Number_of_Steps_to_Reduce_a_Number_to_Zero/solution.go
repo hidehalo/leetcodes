@@ -5,23 +5,25 @@ var dp map[int]int
 func numberOfSteps(num int) int {
 	if dp == nil {
 		dp = make(map[int]int)
-		dp[1] = 1
 	}
-	q, p := 1, 1
+
 	if v, ok := dp[num]; ok {
 		return v
 	}
-	for p < num {
-		q = p
-		if p%2 == 0 { //fixme: wrong algo
-			p++
+
+	p := num
+	for p > 0 {
+		if p%2 == 0 {
+			p >>= 1
 		} else {
-			p *= 2
+			p--
 		}
-		dp[p] = dp[q] + 1
+		if v, ok := dp[p]; ok {
+			dp[num] += v + 1
+			break
+		}
+		dp[num]++
 	}
-	if p == num {
-		return dp[p]
-	}
-	return dp[q]
+
+	return dp[num]
 }

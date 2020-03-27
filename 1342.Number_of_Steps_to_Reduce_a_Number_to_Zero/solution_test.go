@@ -17,9 +17,14 @@ func Test_numberOfSteps(t *testing.T) {
 			6,
 		},
 		{
-			"case1",
+			"case2",
 			args{8},
 			4,
+		},
+		{
+			"case3",
+			args{123},
+			12,
 		},
 	}
 	for _, tt := range tests {
