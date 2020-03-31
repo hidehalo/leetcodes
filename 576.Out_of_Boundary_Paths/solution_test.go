@@ -35,6 +35,11 @@ func Test_findPaths(t *testing.T) {
 			args{8, 50, 23, 5, 26},
 			914783380,
 		},
+		{
+			"case5",
+			args{36, 5, 50, 15, 3},
+			390153306,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
