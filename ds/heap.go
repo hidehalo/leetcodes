@@ -1,8 +1,7 @@
-package main
+package ds
 
 import (
 	"bytes"
-	"fmt"
 	"strconv"
 )
 
@@ -151,10 +150,10 @@ func (h *MaxHeap) Compare(a val, b val) pri {
 	return Priority_LO
 }
 
-func main() {
-	vals := []val{1, 2, 3, 4, 5}
-	maxHeap := NewHeap(vals, new(MaxHeap))
-	minHeap := NewHeap(vals, new(MinHeap))
-	fmt.Println(maxHeap)
-	fmt.Println(minHeap)
-}
+// func main() {
+// 	vals := []val{1, 2, 3, 4, 5}
+// 	maxHeap := NewHeap(vals, new(MaxHeap))
+// 	minHeap := NewHeap(vals, new(MinHeap))
+// 	fmt.Println(maxHeap)
+// 	fmt.Println(minHeap)
+// }

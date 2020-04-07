@@ -1,4 +1,4 @@
-package main
+package ds
 
 import (
 	"fmt"
@@ -67,19 +67,19 @@ func (root *Node) Travasle() {
 	}
 }
 
-func main() {
-	root := Constructor([]string{"anne", "ane", "an"})
-	root.Travasle()
-	samples := []string{
-		"an", "ann", "anne", "ane", "anan", "anen", "n", "",
-	}
-	for _, s := range samples {
-		var ret string
-		if root.Query(s) {
-			ret = "Yes"
-		} else {
-			ret = "No"
-		}
-		fmt.Printf("Query String \"%s\" Result: %s\n", s, ret)
-	}
-}
+// func main() {
+// 	root := Constructor([]string{"anne", "ane", "an"})
+// 	root.Travasle()
+// 	samples := []string{
+// 		"an", "ann", "anne", "ane", "anan", "anen", "n", "",
+// 	}
+// 	for _, s := range samples {
+// 		var ret string
+// 		if root.Query(s) {
+// 			ret = "Yes"
+// 		} else {
+// 			ret = "No"
+// 		}
+// 		fmt.Printf("Query String \"%s\" Result: %s\n", s, ret)
+// 	}
+// }
