@@ -1,27 +1,18 @@
 package main
 
-import "fmt"
-
 func createTargetArray(nums []int, index []int) []int {
-	bucket := make(map[int][]int)
-	for i := 0; i < len(nums); i++ {
-		if bucket[index[i]] == nil {
-			bucket[index[i]] = make([]int, 0)
-		}
-		bucket[index[i]] = append(bucket[index[i]], nums[i])
-	}
 	ret := make([]int, 0)
-	uniq := make(map[int]int)
 	for i := 0; i < len(index); i++ {
-		if _, ok := uniq[index[i]]; ok {
-			continue
-		}
-		uniq[index[i]] = 1
-		list := bucket[index[i]]
-		for j := len(list) - 1; j >= 0; j-- {
-			ret = append(ret, list[j])
+		if len(ret) > index[i] {
+			n := len(ret)
+			ret = append(ret, 0)
+			for j := n; j > index[i]; j-- {
+				ret[j] = ret[j-1]
+			}
+			ret[index[i]] = nums[i]
+		} else {
+			ret = append(ret, nums[i])
 		}
 	}
-	fmt.Println(bucket)
 	return ret
 }
