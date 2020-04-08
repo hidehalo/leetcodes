@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 func repeatedNTimes(A []int) int {
 	check := make(map[int]int)
 	for _, a := range A {
@@ -13,9 +11,4 @@ func repeatedNTimes(A []int) int {
 		}
 	}
 	return -1
-}
-
-func main() {
-	num := []int{1, 2, 3, 2, 5, 2}
-	fmt.Println(repeatedNTimes(num))
 }
