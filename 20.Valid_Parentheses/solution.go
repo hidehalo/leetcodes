@@ -1,9 +1,5 @@
 package main
 
-import (
-	"fmt"
-)
-
 type Stack struct {
 	Top   int
 	store []byte
@@ -56,8 +52,4 @@ func isValid(s string) bool {
 	}
 
 	return stack.Top < 0
-}
-
-func main() {
-	fmt.Println(isValid("()[]{}"))
 }
