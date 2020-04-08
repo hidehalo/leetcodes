@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 type TreeNode struct {
 	Val   int
 	Left  *TreeNode
@@ -53,10 +51,4 @@ func NewTree(nodes []int) *TreeNode {
 	}
 
 	return treeList[0]
-}
-
-func main() {
-	nodes := []int{1, 2, 3, 4, 5, 6, 7}
-	root := NewTree(nodes)
-	fmt.Println(isCompleteTree(root))
 }
