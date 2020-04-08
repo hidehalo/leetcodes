@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"fmt"
 )
 
 type DoubleLinkListNode struct {
@@ -88,8 +87,4 @@ func recur(candidates *[]int, target int, level int, stack *Stack, ret *[][]int)
 			stack.Pop()
 		}
 	}
-}
-
-func main() {
-	fmt.Println(combinationSum([]int{2, 3, 5}, 8))
 }
