@@ -1,37 +1,8 @@
 package main
 
-import "fmt"
-
-type Stack struct {
-	store []byte
-	top   int
-}
-
-func (s *Stack) Push(elm byte) {
-	s.store = append(s.store, elm)
-	s.top++
-}
-
-func (s *Stack) Pop() byte {
-	ret := s.store[s.top]
-	s.top--
-
-	return ret
-}
-
-func (s *Stack) Empty() bool {
-	return s.top == -1
-}
-
-func (s *Stack) Len() int {
-	return s.top + 1
-}
-
-func NewStack() *Stack {
-	return &Stack{
-		top: -1,
-	}
-}
+import (
+	"../ds"
+)
 
 func check(b byte) int {
 	if b >= '0' && b <= '9' {
@@ -47,7 +18,7 @@ func check(b byte) int {
 
 func myAtoi(str string) int {
 	size := len(str)
-	stack := NewStack()
+	stack := ds.NewStack()
 	flag := 1
 	offset := 0
 	for ; offset < size; offset++ {
@@ -119,8 +90,4 @@ func myAtoi(str string) int {
 	}
 
 	return ret * flag
-}
-
-func main() {
-	fmt.Println(myAtoi("0-1"))
 }
