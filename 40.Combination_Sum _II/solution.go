@@ -1,9 +1,5 @@
 package main
 
-import (
-	"fmt"
-)
-
 func combinationSum2(candidates []int, target int) [][]int {
 	size := len(candidates)
 	ret := make([][]int, 0, size)
@@ -20,7 +16,6 @@ func recur(candidates []int, offset int, target int) {
 		return
 	}
 	if target == 0 {
-		fmt.Println("fi")
 		return
 	}
 	if target < 0 {
@@ -34,12 +29,5 @@ func recur(candidates []int, offset int, target int) {
 			break
 		}
 	}
-	fmt.Println(candidates[i])
 	recur(candidates, i+1, target-candidates[i])
-}
-
-func main() {
-	candidates := []int{2, 5, 2, 1, 2}
-	target := 5
-	combinationSum2(candidates, target)
 }
