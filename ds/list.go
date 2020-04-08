@@ -15,3 +15,9 @@ func NewList(nums []int) *ListNode {
 
 	return h
 }
+
+type DoubleLinkListNode struct {
+	Prev *DoubleLinkListNode
+	Next *DoubleLinkListNode
+	Val  byte
+}
