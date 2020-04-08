@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strconv"
 )
 
@@ -38,9 +37,4 @@ func countAndSay(n int) string {
 		}
 		return ret
 	}
-}
-
-func main() {
-	fmt.Println(countAndSay(30))
-	fmt.Println(countAndSay(3))
 }
