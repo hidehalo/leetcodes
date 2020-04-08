@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strconv"
 )
 
@@ -98,19 +97,4 @@ func prisonAfterNDays(cells []int, N int) []int {
 	}
 
 	return cells
-}
-
-func main() {
-	cells := []int{1, 0, 0, 1, 0, 0, 1, 0}
-	N := 1000000000
-	fmt.Println(prisonAfterNDays(cells, N))
-	//e : 0,0,1,1,1,1,1,0
-	cells = []int{0, 0, 1, 1, 1, 1, 0, 0}
-	N = 8
-	fmt.Println(prisonAfterNDays(cells, N))
-	//e : [0,0,0,1,1,0,0,0]
-	cells = []int{0, 1, 0, 1, 1, 0, 0, 1}
-	N = 7
-	fmt.Println(prisonAfterNDays(cells, N))
-	//e : [0,0,1,1,0,0,0,0]
 }
