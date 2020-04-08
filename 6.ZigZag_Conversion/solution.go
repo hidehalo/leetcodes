@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 )
 
 // PAYPALISHIRING n=4
@@ -61,9 +60,4 @@ func convert(s string, numRows int) string {
 	strBuilder.Write(tail.Bytes())
 
 	return strBuilder.String()
-}
-
-func main() {
-	ret := convert("PAYPALISHIRING", 7)
-	fmt.Println(ret, len(ret))
 }
