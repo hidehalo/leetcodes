@@ -4,6 +4,37 @@ import (
 	"sort"
 )
 
+type doubleLinkListNode struct {
+	Tail *doubleLinkListNode
+	Prev *doubleLinkListNode
+	Next *doubleLinkListNode
+	Len  int
+	Val  [3]int
+}
+
+func insert(head *doubleLinkListNode, val, rank, count int) {
+	node := &doubleLinkListNode{nil, head.Tail, nil, 0, [3]int{val, rank, count}}
+	if head.Tail != nil {
+		head.Tail.Next = node
+	} else {
+		head.Next = node
+	}
+	head.Tail = node
+	head.Len++
+}
+
+func delete(head, node *doubleLinkListNode) {
+	if node.Next != nil {
+		node.Next.Prev = node.Prev
+	}
+	node.Prev.Next = node.Next
+	if head.Tail == node {
+		head.Tail = node.Prev
+	}
+	node = nil
+	head.Len--
+}
+
 func sortString(s string) string {
 	// convert to int slice O(n)
 	ui8s := make([]int, 0)
@@ -27,36 +58,70 @@ func sortString(s string) string {
 		counts[current]++
 	}
 	// note: trick for unique character string
-	if len(ranks) == 1 {
+	if len(ranks) <= 1 {
 		return s
 	}
+	// build double link list O(n)
+	head := &doubleLinkListNode{nil, nil, nil, 0, [3]int{}}
+	for i := 1; i <= len(ranks); i++ {
+		insert(head, ranks[i], i, counts[ranks[i]])
+	}
+	p := head.Next
 	ret := make([]byte, 0)
-	p := 1     // rank position
-	order := 0 // 0: ASC|1: DESC
+	order := 0 //-1: STOP 0: ASC|1: DESC
 	// O(n)
 	for i := 0; i < len(ui8s); i++ {
-
-		if p == len(ranks)+1 {
-			order = 1
-		} else if p == 0 {
+		if head.Len == 1 {
+			order = -1
+		} else if p == head.Next {
 			order = 0
+		} else if p == head.Tail {
+			order = 1
 		}
-
-		if counts[ranks[p]] <= 0 {
-			if p == len(ranks)+1 {
-				order = 1
-			} else if p == 0 {
-				order = 0
+		if p.Val[2] > 0 {
+			ret = append(ret, byte(p.Val[0]))
+			if p.Val[2] == 1 {
+				q := p
+				if order == 0 {
+					p = p.Next
+				} else {
+					p = p.Prev
+				}
+				delete(head, q)
 			}
 		}
-
-		counts[ranks[p]]--
-		ret = append(ret, byte(ranks[p]))
-
-		if order == 1 {
-			p--
+		if head.Len == 1 {
+			order = -1
+		} else if p == head.Next {
+			order = 0
+		} else if p == head.Tail {
+			order = 1
+		}
+		if i > 0 && head.Len > 1 && (p == head.Next || p == head.Tail) {
+			if p.Val[2] > 0 {
+				ret = append(ret, byte(p.Val[0]))
+				if p.Val[2] == 1 {
+					q := p
+					if order == 0 {
+						p = p.Next
+					} else {
+						p = p.Prev
+					}
+					delete(head, q)
+				}
+			}
+		}
+		if head.Len == 1 {
+			order = -1
+		} else if p == head.Next {
+			order = 0
+		} else if p == head.Tail {
+			order = 1
+		}
+		if order == 0 {
+			p = p.Next
 		} else {
-			p++
+			p = p.Prev
 		}
 	}
 
