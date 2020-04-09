@@ -12,6 +12,17 @@ type doubleLinkListNode struct {
 	Val  [3]int
 }
 
+func (head *doubleLinkListNode) String() string {
+	bytes := make([]byte, 0)
+	p := head.Next
+	for p != nil {
+		bytes = append(bytes, byte(p.Val[0]))
+		p = p.Next
+	}
+
+	return string(bytes)
+}
+
 func insert(head *doubleLinkListNode, val, rank, count int) {
 	node := &doubleLinkListNode{nil, head.Tail, nil, 0, [3]int{val, rank, count}}
 	if head.Tail != nil {
@@ -27,7 +38,9 @@ func delete(head, node *doubleLinkListNode) {
 	if node.Next != nil {
 		node.Next.Prev = node.Prev
 	}
-	node.Prev.Next = node.Next
+	if node.Prev != nil {
+		node.Prev.Next = node.Next
+	}
 	if head.Tail == node {
 		head.Tail = node.Prev
 	}
@@ -66,62 +79,32 @@ func sortString(s string) string {
 	for i := 1; i <= len(ranks); i++ {
 		insert(head, ranks[i], i, counts[ranks[i]])
 	}
-	p := head.Next
 	ret := make([]byte, 0)
-	order := 0 //-1: STOP 0: ASC|1: DESC
+	q, p := head, head.Next
+	order := 0 //0: ASC|1: DESC
 	// O(n)
 	for i := 0; i < len(ui8s); i++ {
 		if head.Len == 1 {
-			order = -1
+			ret = append(ret, byte(head.Next.Val[0]))
+			continue
 		} else if p == head.Next {
 			order = 0
 		} else if p == head.Tail {
 			order = 1
 		}
+
 		if p.Val[2] > 0 {
 			ret = append(ret, byte(p.Val[0]))
+			if order == 0 {
+				p = p.Next
+				q = q.Next
+			} else {
+				p = p.Prev
+				q = q.Prev
+			}
 			if p.Val[2] == 1 {
-				q := p
-				if order == 0 {
-					p = p.Next
-				} else {
-					p = p.Prev
-				}
 				delete(head, q)
 			}
-		}
-		if head.Len == 1 {
-			order = -1
-		} else if p == head.Next {
-			order = 0
-		} else if p == head.Tail {
-			order = 1
-		}
-		if i > 0 && head.Len > 1 && (p == head.Next || p == head.Tail) {
-			if p.Val[2] > 0 {
-				ret = append(ret, byte(p.Val[0]))
-				if p.Val[2] == 1 {
-					q := p
-					if order == 0 {
-						p = p.Next
-					} else {
-						p = p.Prev
-					}
-					delete(head, q)
-				}
-			}
-		}
-		if head.Len == 1 {
-			order = -1
-		} else if p == head.Next {
-			order = 0
-		} else if p == head.Tail {
-			order = 1
-		}
-		if order == 0 {
-			p = p.Next
-		} else {
-			p = p.Prev
 		}
 	}
 
