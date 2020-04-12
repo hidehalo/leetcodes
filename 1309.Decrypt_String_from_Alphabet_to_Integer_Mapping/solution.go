@@ -1,32 +1,25 @@
 package main
 
-import "fmt"
-
 func freqAlphabets(s string) string {
 	ret := make([]byte, 0)
-	buf := [2]byte{}
-	p := 0
-	for i := 0; i < len(s); i++ {
-		if p == 0 && s[i] > '2' {
-			fmt.Printf(">> Decode %c to %c", s[i], 'a'+s[i]-'0')
-			ret = append(ret, 'a'+s[i]-'0')
-			continue
-		}
+	i, j, k := 0, 1, 2
 
-		if s[i] == '#' {
-			ret = append(ret, 'a'+10*(buf[0]-'0')+buf[1]-'0')
-			p = 0
-			continue
+	for i < len(s)-2 {
+		if s[k] == '#' {
+			ret = append(ret, 'a'+10*(s[i]-'0')+s[j]-'1')
+			i = k + 1
+			j = i + 1
+			k = j + 1
+		} else {
+			ret = append(ret, 'a'+s[i]-'1')
+			i++
+			j++
+			k++
 		}
+	}
 
-		if p == 2 {
-			for j := 0; j < p; j++ {
-				ret = append(ret, 'a'+buf[j]-'0')
-			}
-			p = 0
-		}
-		buf[p] = s[i]
-		p++
+	for ; i < len(s); i++ {
+		ret = append(ret, 'a'+s[i]-'1')
 	}
 
 	return string(ret)
