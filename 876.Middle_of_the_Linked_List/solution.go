@@ -8,5 +8,5 @@ func middleNode(head *ListNode) *ListNode {
 		p = p.Next
 	}
 
-	return ps[(len(ps)+1)/2]
+	return ps[len(ps)/2]
 }
