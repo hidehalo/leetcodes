@@ -32,7 +32,7 @@ func insert(r *TreeNode, n int) {
 	}
 }
 
-func newBST(nums []int) *TreeNode {
+func NewBST(nums []int) *TreeNode {
 	r := &TreeNode{nums[0], nil, nil}
 	for i := 1; i < len(nums); i++ {
 		insert(r, nums[i])
