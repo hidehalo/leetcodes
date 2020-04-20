@@ -1,33 +1,53 @@
 package main
 
 type RecentCounter struct {
-	currentTlIdx int
-	pingsTsMap map[int]int
-	timeline []int
+	head      int
+	tail      int
+	lastest   int
+	pings     []int
+	timelines []int
 }
 
 func Constructor() RecentCounter {
-    return RecentCounter{
-		currentTlIdx: 1,
-		pingsTsMap: make(map[int]int),
-		timeline: make([]int, 3000),
+	return RecentCounter{
+		head:      0,
+		tail:      0,
+		lastest:   0,
+		pings:     make([]int, 3000),
+		timelines: make([]int, 3000),
 	}
 }
 
 func (this *RecentCounter) Ping(t int) int {
+	startTs := t - 3000
+	if this.lastest == 0 || this.lastest != t {
+		this.lastest = t
+		this.timelines[this.tail] = t
+		this.pings[this.tail]++
+		this.tail = (this.tail + 1) % 3000
+	} else {
+		this.pings[this.tail-1]++
+	}
+	for i := 0; i < 3000; i++ {
+		if this.timelines[i] >= startTs {
+			this.head = i
+			break
+		}
+		this.pings[i] = 0
+	}
 	ret := 0
-	ts := this.timeline[this.currentTlIdx]
-	startTs := t-3000
-	this.pingsTsMap[t]++
-	if ts < startTs {
-		this.currentTlIdx = 0
-		this.timeline[0] = t
-		return ret
+	if this.head > this.tail {
+		for i := this.tail; i >= 0; i-- {
+			ret += this.pings[i]
+		}
+		for i := this.head; i < 3000; i++ {
+			ret += this.pings[i]
+		}
+	} else {
+		for i := this.head; i < this.tail; i++ {
+			ret += this.pings[i]
+		}
 	}
-	for ts <= t {
-		ret += this.pingsTsMap[this.timeline[this.currentTlIdx]]
-		this.currentTlIdx++
-		ts = this.timeline[this.currentTlIdx]
-	}
+
 	return ret
 }
