@@ -7,13 +7,16 @@ func fib(N int) int {
 		memo = make([]int, 0)
 		memo = append(memo, 0, 1)
 	}
-	if N < len(memo)-1 {
-		return memo[N]
+	if N == 0 {
+		return 0
+	} else if N == 1 {
+		return 1
+	} else if N < len(memo)-1 {
+		return memo[N-1] + memo[N-2]
 	}
-	for i := 2; i <= N; i++ {
-		val = memo[i-1] + memo[i-2]
-		memo = append(memo, val)
+	for i := len(memo); i <= N; i++ {
+		memo = append(memo, memo[i-1]+memo[i-2])
 	}
 
-	return memo[N]
+	return memo[N-1] + memo[N-2]
 }
