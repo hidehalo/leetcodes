@@ -1,15 +1,18 @@
 package main
 
-import "fmt"
-
 func removeDuplicates(S string) string {
+	return string(procedure([]byte(S)))
+}
+
+// bad
+func procedure(S []byte) []byte {
 	p := 0
 	q := 1
-	for ; q < len(S); q++ {
+	for q < len(S) {
 		p = q - 1
 		if S[p] == S[q] {
-			t := p
-			k := q
+			t := p - 1
+			k := q + 1
 			for t >= 0 && k < len(S) {
 				if S[t] != S[k] {
 					break
@@ -17,12 +20,18 @@ func removeDuplicates(S string) string {
 				t--
 				k++
 			}
-			if t >= 0 {
-				S = S[t:p] + S[k:]
-			} else {
+			if t >= 0 && k < len(S) {
+				S = append(S[:t+1], S[k:]...)
+			} else if t < 0 && k < len(S) {
 				S = S[k:]
+			} else if t >= 0 && k >= len(S) {
+				S = S[:t+1]
+			} else {
+				S = []byte{}
 			}
-			fmt.Println(S)
+			q = 1
+		} else {
+			q++
 		}
 	}
 
