@@ -6,10 +6,16 @@ func sumRootToLeaf(root *TreeNode) int {
 
 func procedure(root *TreeNode, n int) int {
 	if root == nil {
-		return n
+		return 0
 	}
 	v := (n << 1) + root.Val
-
-	return procedure(root.Left, v) + procedure(root.Right, v)
-
+	if root.Left == nil && root.Right == nil {
+		return v
+	}
+	if root.Left != nil && root.Right != nil {
+		return procedure(root.Left, v) + procedure(root.Right, v)
+	} else if root.Left != nil {
+		return procedure(root.Left, v)
+	}
+	return procedure(root.Right, v)
 }
