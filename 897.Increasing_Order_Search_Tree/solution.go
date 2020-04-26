@@ -1,6 +1,10 @@
 package main
 
-func increasingBST(root *TreeNode) *TreeNode {
+import (
+	"../ds"
+)
+
+func increasingBST(root *ds.TreeNode) *ds.TreeNode {
 	if root == nil {
 		return nil
 	}
@@ -24,4 +28,8 @@ func increasingBST(root *TreeNode) *TreeNode {
 	}
 
 	return root
+}
+
+func rightRotate(p, x *ds.TreeNode) *ds.TreeNode {
+
 }
