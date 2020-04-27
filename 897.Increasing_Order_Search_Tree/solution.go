@@ -1,35 +1,42 @@
 package main
 
 import (
+	"fmt"
+
 	"../ds"
 )
 
 func increasingBST(root *ds.TreeNode) *ds.TreeNode {
-	if root == nil {
-		return nil
+	p := root
+	var q *ds.TreeNode
+	for p.Left != nil {
+		q = p
+		p = p.Left
 	}
-	if root.Left == nil && root.Right == nil {
-		return root
-	} else if root.Left != nil && root.Right == nil {
-		root.Right = root.Left
-		root.Left = nil
-		root.Right = increasingBST(root.Right)
-	} else if root.Left == nil && root.Right != nil {
-		root.Right = increasingBST(root.Right)
-	} else {
-		tmp := root.Right
-		root.Right = increasingBST(root.Left)
-		root.Left = nil
-		p := root
-		for p.Right != nil {
-			p = p.Right
-		}
-		p.Right = increasingBST(tmp)
-	}
+	root = p
+	procedure(q)
 
 	return root
 }
+func procedure(root *ds.TreeNode) {
+	if root.Left != nil {
+		fmt.Printf("proceduring %v\n", root)
+		rightRotate(root)
+		procedure(root.Right)
+	}
+}
 
-func rightRotate(p, x *ds.TreeNode) *ds.TreeNode {
+// func leftRotate(p *ds.TreeNode) {
+// 	hold := p.Right
+// 	p.Right.Left = p
+// 	p.Right = hold.Left
+// 	fmt.Printf("p=%v\tp.Left=%v\tp.Right=%v\n", p, p.Left, p.Right)
 
+// }
+
+func rightRotate(p *ds.TreeNode) {
+	hold := p.Left.Right
+	p.Left.Right = p
+	p.Left = hold
+	fmt.Printf("p=%v\tp.Left=%v\tp.Right=%v\n", p, p.Left, p.Right)
 }
