@@ -25,7 +25,12 @@ func Test_allCellsDistOrder(t *testing.T) {
 		{
 			"case2",
 			args{2, 2, 0, 1},
-			[][]int{{0, 0}, {1, 1}},
+			[][]int{{0, 1}, {0, 0}, {1, 1}, {1, 0}},
+		},
+		{
+			"case3",
+			args{2, 3, 1, 2},
+			[][]int{{1, 2}, {0, 2}, {1, 1}, {0, 1}, {1, 0}, {0, 0}},
 		},
 	}
 	for _, tt := range tests {
