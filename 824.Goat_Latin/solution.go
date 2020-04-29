@@ -17,6 +17,8 @@ func toGoatLatin(S string) string {
 	checkFirst := true
 	endMa := false
 	wordCount := 0
+	spec := false
+	var moveToEnd byte
 	for i := 0; i < len(S); i++ {
 		if checkFirst == true {
 			checkFirst = false
@@ -25,10 +27,22 @@ func toGoatLatin(S string) string {
 				(i < len(S)-1 &&
 					(S[i] == 'o' || S[i] == 'O') &&
 					(S[i+1] == 'r' || S[i+1] == 'R'))) {
-				continue
+				moveToEnd = S[i]
+				if len(S)-1 != i {
+					continue
+				} else {
+					spec = true
+				}
 			}
 		}
+		if len(S)-1 == i && spec == false {
+			ret = append(ret, S[i])
+		}
 		if S[i] == ' ' || len(S)-1 == i {
+			if moveToEnd != 0 {
+				ret = append(ret, moveToEnd)
+				moveToEnd = 0
+			}
 			wordCount++
 			checkFirst = true
 			if endMa == true {
@@ -39,7 +53,9 @@ func toGoatLatin(S string) string {
 				ret = append(ret, 'a')
 			}
 		}
-		ret = append(ret, S[i])
+		if len(S)-1 != i {
+			ret = append(ret, S[i])
+		}
 	}
 
 	return string(ret)
