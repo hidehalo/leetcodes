@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+)
 
 type key int
 type pri int
@@ -22,7 +25,6 @@ type Heap struct {
 }
 
 func (h *Heap) IsEmpty() bool {
-	fmt.Println("size", h.size)
 	return h.size == 0
 }
 
@@ -31,11 +33,18 @@ func (h *Heap) Top() int {
 }
 
 func (h *Heap) Insert(v int) {
-	h.store = append(h.store, v)
+	if int(h.size) >= len(h.store) {
+		h.store = append(h.store, v)
+	} else {
+		h.store[h.size] = v
+	}
+	i := key(h.size)
 	h.size++
-	i := key(h.size - 1)
-	isHi := h.priority.Compare(h.store[h.parent(i)], h.store[i]) != Priority_LO
-	for i > 0 && !isHi {
+	for i > 0 {
+		isLow := h.priority.Compare(h.store[h.parent(i)], h.store[i]) == Priority_LO
+		if !isLow {
+			break
+		}
 		h.swap(h.parent(i), i)
 		i = h.parent(i)
 	}
@@ -53,7 +62,23 @@ func (h *Heap) ExtractTop() int {
 	return top
 }
 
+func (h *Heap) String() string {
+	strBuf := make([]byte, 0)
+	for h.IsEmpty() != true {
+		v := h.ExtractTop()
+		strBuf = append(strBuf, []byte(strconv.FormatInt(int64(v), 10))...)
+		if h.IsEmpty() != true {
+			strBuf = append(strBuf, ' ')
+		}
+	}
+
+	return string(strBuf)
+}
+
 func (h *Heap) heapify(hi key) {
+	if hi >= key(h.size-1) {
+		return
+	}
 	l := h.left(hi)
 	r := h.right(hi)
 	_hi := hi
@@ -92,12 +117,6 @@ func (h *Heap) swap(a key, b key) {
 	h.store[b] = tmp
 }
 
-func (h *Heap) initHeap(vals *[]int) {
-	for _, v := range *vals {
-		h.Insert(v)
-	}
-}
-
 type MaxHeap struct {
 	IPriority
 }
@@ -125,18 +144,20 @@ func NewHeap(vals []int, priority IPriority) *Heap {
 	return h
 }
 
+// FIXME: max heap is bugy
 func lastStoneWeight(stones []int) int {
 	maxHeap := NewHeap(stones, new(MaxHeap))
+	fmt.Println(maxHeap.store)
+
 	for maxHeap.IsEmpty() == false {
-		fmt.Println("Before Extract", maxHeap.store)
 		h1 := maxHeap.ExtractTop()
-		fmt.Println(h1, "Extracted", maxHeap.store)
 		if maxHeap.IsEmpty() {
 			return h1
 		}
 		h2 := maxHeap.ExtractTop()
-		fmt.Println(h2, "Extracted", maxHeap.store)
-		if h1 == h2 {
+		if maxHeap.IsEmpty() {
+			return h1 - h2
+		} else if h1 == h2 {
 			continue
 		} else {
 			maxHeap.Insert(h1 - h2)
