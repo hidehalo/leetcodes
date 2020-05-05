@@ -1,83 +1,84 @@
 package ds
 
-import (
-	"bytes"
-	"strconv"
-)
-
-type key int
-type val int
-type pri int
-
 const (
-	Priority_EQ pri = 0
-	Priority_HI pri = 1
-	Priority_LO pri = 2
+	PriorityEQ = 0
+	PriorityHI = 1
+	PriorityLO = 2
 )
 
 type IPriority interface {
-	Compare(a val, b val) pri
+	Compare(a int, b int) int
 }
 
 type Heap struct {
 	priority IPriority
-	size     uint
-	store    []val
+	size     int
+	store    []int
 }
 
-type MinHeap struct {
-	IPriority
+func (h *Heap) IsEmpty() bool {
+	return h.size == 0
 }
 
-type MaxHeap struct {
-	IPriority
-}
-
-func (h *Heap) Top() val {
+func (h *Heap) Top() int {
+	if h.size == 0 {
+		return -1
+	}
 	return h.store[0]
 }
 
-func (h *Heap) Insert(v val) {
-	h.store = append(h.store, v)
+func (h *Heap) Insert(v int) int {
+	if h.size >= len(h.store) {
+		h.store = append(h.store, v)
+	} else {
+		h.store[h.size] = v
+	}
+	i := h.size
 	h.size++
-	i := key(h.size - 1)
-	isHi := h.priority.Compare(h.store[h.parent(i)], h.store[i]) != Priority_LO
-	for i > 0 && !isHi {
+	for i > 0 {
+		isLow := h.priority.Compare(h.store[h.parent(i)], h.store[i]) == PriorityLO
+		if !isLow {
+			break
+		}
 		h.swap(h.parent(i), i)
 		i = h.parent(i)
 	}
+
+	return i
 }
 
-func (h *Heap) ExtractTop() val {
-	if h.size >= 1 {
-		top := h.store[0]
-		h.store[0] = h.store[h.size-1]
-		h.size--
-		h.heapify(0)
-
-		return top
+func (h *Heap) ExtractTop() int {
+	if h.size == 0 {
+		return -1
 	}
+	top := h.store[0]
+	h.store[0] = h.store[h.size-1]
+	h.size--
+	h.heapify(0)
 
-	return h.store[0]
+	return top
 }
 
-func (h *Heap) heapify(hi key) {
+func (h *Heap) heapify(hi int) {
+	if hi >= h.size-1 {
+		return
+	}
 	l := h.left(hi)
 	r := h.right(hi)
-	_hi := hi
-	if h.priority.Compare(h.store[hi], h.store[l]) == Priority_LO {
-		_hi = l
+	newHi := hi
+	if l < h.size && h.priority.Compare(h.store[newHi], h.store[l]) == PriorityLO {
+		newHi = l
 	}
-	if h.priority.Compare(h.store[hi], h.store[r]) == Priority_LO {
-		_hi = r
+	if r < h.size && h.priority.Compare(h.store[newHi], h.store[r]) == PriorityLO {
+		newHi = r
 	}
-	if _hi != hi {
-		h.swap(_hi, hi)
-		h.heapify(hi)
+	if newHi != hi {
+		h.swap(newHi, hi)
+		h.heapify(newHi)
 	}
 }
 
-func (h *Heap) parent(i key) key {
+func (h *Heap) parent(i int) int {
 	p := (i - 1) >> 1
 	if p >= 0 {
 		return p
@@ -86,74 +87,54 @@ func (h *Heap) parent(i key) key {
 	return 0
 }
 
-func (h *Heap) left(i key) key {
-	return i<<1 + 1
+func (h *Heap) left(i int) int {
+	return h.right(i) - 1
 }
 
-func (h *Heap) right(i key) key {
-	return h.left(i) + 1
+func (h *Heap) right(i int) int {
+	return (i + 1) << 1
 }
 
-func (h *Heap) String() string {
-	var strBuf bytes.Buffer
-	i := 0
-	for i < int(h.size) {
-		strBuf.WriteString(strconv.FormatInt(int64(h.store[i]), 32))
-		i++
-	}
-
-	return strBuf.String()
-}
-
-func (h *Heap) swap(a key, b key) {
+func (h *Heap) swap(a int, b int) {
 	tmp := h.store[a]
 	h.store[a] = h.store[b]
 	h.store[b] = tmp
 }
 
-func (h *Heap) initHeap(vals *[]val) {
-	for _, v := range *vals {
-		h.Insert(v)
-	}
-}
-
-func NewHeap(vals []val, priority IPriority) *Heap {
+func NewHeap(vals []int, priority IPriority) *Heap {
 	h := &Heap{
 		priority: priority,
-		size:     0,
-		store:    make([]val, 0, 1000),
+		size:     len(vals),
+		store:    make([]int, int(len(vals))),
 	}
-	for _, v := range vals {
-		h.Insert(v)
+	copy(h.store, vals)
+	for i := h.parent(h.size - 1); i >= 0; i-- {
+		h.heapify(i)
 	}
 
 	return h
 }
 
-func (h *MinHeap) Compare(a val, b val) pri {
-	if a < b {
-		return Priority_HI
-	} else if a == b {
-		return Priority_EQ
-	}
+type MaxHeap struct{ IPriority }
 
-	return Priority_LO
-}
-
-func (h *MaxHeap) Compare(a val, b val) pri {
+func (h *MaxHeap) Compare(a int, b int) int {
 	if a > b {
-		return Priority_HI
+		return PriorityHI
 	} else if a == b {
-		return Priority_EQ
+		return PriorityEQ
 	}
 
-	return Priority_LO
+	return PriorityLO
 }
 
-// func main() {
-// 	vals := []val{1, 2, 3, 4, 5}
-// 	maxHeap := NewHeap(vals, new(MaxHeap))
-// 	minHeap := NewHeap(vals, new(MinHeap))
-// 	fmt.Println(maxHeap)
-// 	fmt.Println(minHeap)
-// }
+type MinHeap struct{ IPriority }
+
+func (h *MinHeap) Compare(a int, b int) int {
+	if a < b {
+		return PriorityHI
+	} else if a == b {
+		return PriorityEQ
+	}
+
+	return PriorityLO
+}
