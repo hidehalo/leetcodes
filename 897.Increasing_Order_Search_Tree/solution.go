@@ -1,42 +1,32 @@
 package main
 
-import (
-	"fmt"
-
-	"../ds"
-)
-
-func increasingBST(root *ds.TreeNode) *ds.TreeNode {
-	p := root
-	var q *ds.TreeNode
-	for p.Left != nil {
-		q = p
-		p = p.Left
+// optimal: rotate only?
+func increasingBST(root *TreeNode) *TreeNode {
+	vals := traversal(root)
+	head := &TreeNode{}
+	p := head
+	for i := 0; i < len(vals); i++ {
+		node := &TreeNode{Val: vals[i]}
+		p.Right = node
+		p = p.Right
 	}
-	root = p
-	procedure(q)
 
-	return root
-}
-func procedure(root *ds.TreeNode) {
-	if root.Left != nil {
-		fmt.Printf("proceduring %v\n", root)
-		rightRotate(root)
-		procedure(root.Right)
-	}
+	return head.Right
 }
 
-// func leftRotate(p *ds.TreeNode) {
-// 	hold := p.Right
-// 	p.Right.Left = p
-// 	p.Right = hold.Left
-// 	fmt.Printf("p=%v\tp.Left=%v\tp.Right=%v\n", p, p.Left, p.Right)
+func traversal(node *TreeNode) []int {
+	if node == nil {
+		return []int{}
+	}
+	if node.Left == nil && node.Right == nil {
+		return []int{node.Val}
+	}
+	left := traversal(node.Left)
+	right := traversal(node.Right)
+	vals := []int{}
+	vals = append(vals, left...)
+	vals = append(vals, node.Val)
+	vals = append(vals, right...)
 
-// }
-
-func rightRotate(p *ds.TreeNode) {
-	hold := p.Left.Right
-	p.Left.Right = p
-	p.Left = hold
-	fmt.Printf("p=%v\tp.Left=%v\tp.Right=%v\n", p, p.Left, p.Right)
+	return vals
 }
