@@ -13,7 +13,16 @@ func Test_oddCells(t *testing.T) {
 		args args
 		want int
 	}{
-		// TODO: Add test cases.
+		{
+			"case1",
+			args{2, 3, [][]int{{0, 1}, {1, 1}}},
+			6,
+		},
+		{
+			"case2",
+			args{2, 2, [][]int{{1, 1}, {0, 0}}},
+			0,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
