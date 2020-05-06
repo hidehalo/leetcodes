@@ -11,7 +11,21 @@ func Test_removeOuterParentheses(t *testing.T) {
 		args args
 		want string
 	}{
-		// TODO: Add test cases.
+		{
+			"case1",
+			args{"(()())(())"},
+			"()()()",
+		},
+		{
+			"case2",
+			args{"(()())(())(()(()))"},
+			"()()()()(())",
+		},
+		{
+			"case3",
+			args{"()()"},
+			"",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
