@@ -1,27 +1,20 @@
 package main
 
-import (
-	"fmt"
-)
-
 func numSpecialEquivGroups(A []string) int {
-	counts := make([]int, 20)
-	for i := 0; i < len(A)-1; i++ {
-		for j := i + 1; j < len(A); j++ {
-			if len(A[i]) == len(A[j]) {
-				for k := 0; k < len(A[i])-2; k++ {
-					if A[i][k] == A[j][k+2] && A[i][k+2] == A[j][k] {
-						counts[i]++
-						counts[j]++
-						fmt.Printf("%s special-equivalent %s\n", A[i], A[j])
-						break
-					}
-				}
+	hash := make(map[[52]int]struct{})
+	for _, word := range A {
+		var data [52]int
+		for i, c := range word {
+			// odd index alphabet number of S equal odd index alphabet number of T
+			// S MUST special-equivalent T in odd index alphabets through some moves
+			// the rule also works on even index alphabets
+			if i%2 == 0 {
+				data[c-'a']++
+			} else {
+				data[c-'a'+26]++
 			}
 		}
+		hash[data] = struct{}{}
 	}
-	// sort.Ints(counts)
-	fmt.Println(counts)
-
-	return counts[19] + 1
+	return len(hash)
 }
