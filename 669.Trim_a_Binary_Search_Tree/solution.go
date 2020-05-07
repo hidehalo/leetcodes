@@ -1,48 +1,18 @@
 package main
 
-func preccesor(root *TreeNode, v int) *TreeNode {
-	p := root
-	for p != nil {
-		if p.Val == v {
-			break
-		} else if p.Val < v {
-			break
-		}
-		p = p.Left
-	}
-
-	return p
-}
-
-func succesor(root *TreeNode, v int) *TreeNode {
-	p := root
-	for p != nil {
-		if p.Val == v {
-			break
-		} else if p.Val > v {
-			break
-		}
-		p = p.Right
-	}
-
-	return p
-}
-
 func trimBST(root *TreeNode, L int, R int) *TreeNode {
-	if root.Val >= L && root.Val <= R {
-		root.Left = succesor(root.Left, L)
-		if root.Left != nil {
-			root.Left.Left = nil
-		}
-		root.Right = preccesor(root.Right, R)
-		if root.Right != nil {
-			root.Right.Right = nil
-		}
-	} else if root.Val < L {
-		root = succesor(root.Right, L)
-	} else {
-		root = preccesor(root.Left, R)
+	if root == nil {
+		return nil
 	}
+	if root.Val < L {
+		root.Left = nil
+		return trimBST(root.Right, L, R)
+	} else if root.Val > R {
+		root.Right = nil
+		return trimBST(root.Left, L, R)
+	}
+	root.Left = trimBST(root.Left, L, R)
+	root.Right = trimBST(root.Right, L, R)
 
 	return root
 }
