@@ -27,6 +27,21 @@ func Test_merge(t *testing.T) {
 			args{[]int{1, 11, 111, 1111, 0, 0, 0, 0}, 4, []int{9, 10, 19, 20}, 4},
 			[]int{1, 9, 10, 11, 19, 20, 111, 1111},
 		},
+		{
+			"case3",
+			args{[]int{1}, 1, []int{}, 0},
+			[]int{1},
+		},
+		{
+			"case4",
+			args{[]int{}, 0, []int{}, 0},
+			[]int{},
+		},
+		{
+			"case5",
+			args{[]int{}, 0, []int{1}, 1},
+			[]int{1},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
