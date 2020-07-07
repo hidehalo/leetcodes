@@ -26,6 +26,11 @@ func Test_checkPossibility(t *testing.T) {
 			args{[]int{3, 4, 2, 3}},
 			false,
 		},
+		{
+			"case4",
+			args{[]int{-1, 4, 2, 3}},
+			true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
