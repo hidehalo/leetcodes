@@ -20,7 +20,7 @@ func countDepth(root *TreeNode, d int) int {
 	if root.Left == nil && root.Right == nil {
 		return d
 	} else if root.Left == nil && root.Right != nil {
-
+		return countDepth()
 	} else if root.Left != nil && root.Right == nil {
 
 	} else {
