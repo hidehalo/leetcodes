@@ -1,23 +1,34 @@
 package main
 
-import "fmt"
-
 func isBalanced(root *TreeNode) bool {
 	if root == nil {
 		return true
 	}
-	hOfLeft := heightOfTree(root.Left, 0)
-	hOfRight := heightOfTree(root.Right, 0)
-	fmt.Println(hOfLeft, hOfRight)
-	return abs(hOfLeft-hOfRight) < 2
+	hOfLeft, bOfLeft := heightOfTree(root.Left, 0)
+	if !bOfLeft {
+		return false
+	}
+	hOfRight, bOfRight := heightOfTree(root.Right, 0)
+	if !bOfRight || abs(hOfLeft-hOfRight) >= 2 {
+		return false
+	}
+	return true
 }
 
-func heightOfTree(root *TreeNode, h int) int {
+func heightOfTree(root *TreeNode, h int) (int, bool) {
 	if root == nil {
-		return h
+		return h, true
+	}
+	hOfLeft, bOfLeft := heightOfTree(root.Left, h+1)
+	if !bOfLeft {
+		return -1, false
+	}
+	hOfRight, bOfRight := heightOfTree(root.Right, h+1)
+	if !bOfRight || abs(hOfLeft-hOfRight) >= 2 {
+		return max(hOfLeft, hOfRight), false
 	}
 
-	return max(heightOfTree(root.Left, h+1), heightOfTree(root.Right, h+1))
+	return max(hOfLeft, hOfRight), true
 }
 
 func max(a, b int) int {
@@ -28,7 +39,7 @@ func max(a, b int) int {
 }
 
 func abs(a int) int {
-	if a < 0 {
+	if a >= 0 {
 		return a
 	}
 	return -a
