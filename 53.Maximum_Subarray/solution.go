@@ -1,16 +1,14 @@
 package main
 
 func maxSubArray(nums []int) int {
-	mid := len(nums) / 2
-
-}
-
-func arraySum(nums []int) int {
+	ret := nums[0]
 	sum := 0
-	for _, v := range nums {
-		sum += v
+	for i := 0; i < len(nums); i++ {
+		sum += nums[i]
+		ret = max(sum, ret)
+		sum = max(sum, 0)
 	}
-	return sum
+	return ret
 }
 
 func max(a, b int) int {
