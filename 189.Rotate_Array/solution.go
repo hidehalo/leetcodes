@@ -5,20 +5,13 @@ func rotate(nums []int, k int) {
 	if k == 0 {
 		return
 	}
-	offset1 := 0
-	offset2 := len(nums) - k
-	// fixme: overlap situation
-	for offset1 < offset2 {
-		swapArray(nums, offset1, offset2, k)
-		offset1 += k
-	}
+	reverseArray(nums[0:])
+	reverseArray(nums[0:k])
+	reverseArray(nums[k:])
 }
 
-func swapArray(arr []int, offset1, offset2, length int) {
-	for i := 0; i < length; i++ {
-		if offset1+i >= len(arr) || offset2+i >= len(arr) {
-			break
-		}
-		arr[offset1+i], arr[offset2+i] = arr[offset2+i], arr[offset1+i]
+func reverseArray(arr []int) {
+	for i := 0; i < len(arr)/2; i++ {
+		arr[i], arr[len(arr)-1-i] = arr[len(arr)-1-i], arr[i]
 	}
 }
