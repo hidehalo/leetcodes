@@ -1,18 +1,21 @@
 package main
 
 func reverseVowels(s string) string {
-	prev, next := 0, 0
+	prev, next := 0, len(s)-1
 	data := []byte(s)
-	for prev < len(data) {
-		if isVowels(data[prev]) {
-			for next = prev + 1; next < len(data); next++ {
-				if isVowels(data[next]) {
-					data[prev], data[next] = data[next], data[prev]
-					break
-				}
-			}
-			prev = next
+	for prev < next {
+		firstCheck := isVowels(data[prev])
+		secondCheck := isVowels(data[next])
+		if firstCheck && secondCheck {
+			data[prev], data[next] = data[next], data[prev]
+			next--
+			prev++
+		} else if firstCheck {
+			next--
+		} else if secondCheck {
+			prev++
 		} else {
+			next--
 			prev++
 		}
 	}
