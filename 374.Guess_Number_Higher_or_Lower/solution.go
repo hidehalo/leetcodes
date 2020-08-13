@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 /**
  * Forward declaration of guess API.
  * @param  num   your guess
@@ -15,16 +13,15 @@ func guessNumber(n int) int {
 	s, e := 1, n
 	pivot := s + (e-s)/2
 
-	for e > s {
+	for e >= s {
 		guessResult := guess(pivot)
 		if guessResult == 0 {
 			return pivot
 		} else if guessResult == -1 {
-			s = pivot
+			e = pivot - 1
 		} else {
-			e = pivot
+			s = pivot + 1
 		}
-		fmt.Println(pivot)
 		pivot = s + (e-s)/2
 	}
 	return -1
