@@ -1,17 +1,19 @@
 package main
 
 func findTilt(root *TreeNode) int {
+	_, ret := sum(root)
+
+	return ret
+}
+
+func sum(root *TreeNode) (int, int) {
 	if root == nil {
-		return 0
+		return 0, 0
 	}
-	if root.Left == nil && root.Right == nil {
-		return 0
-	} else if root.Left != nil {
-		return root.Left.Val + findTilt(root.Left)
-	} else if root.Right != nil {
-		return root.Right.Val + findTilt(root.Right)
-	}
-	return abs(root.Right.Val-root.Left.Val) + findTilt(root.Right) + findTilt(root.Left)
+	sumLeft, tiltLeft := sum(root.Left)
+	sumRight, tiltRight := sum(root.Right)
+
+	return root.Val + sumLeft + sumRight, abs(sumLeft-sumRight) + tiltLeft + tiltRight
 }
 
 func abs(a int) int {
